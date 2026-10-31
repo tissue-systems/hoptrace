@@ -1,0 +1,25 @@
+[package]
+name = "hoptrace"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["Tissue Systems, Inc. <oss@tissue.systems>"]
+license = "MIT OR Apache-2.0"
+description = "mtr-style path traces over an unprivileged ICMP socket"
+repository = "https://github.com/tissue-systems/hoptrace"
+readme = "README.md"
+keywords = ["traceroute", "mtr", "icmp", "ping", "network"]
+categories = ["network-programming"]
+exclude = [".github/"]
+
+[dependencies]
+# std has no constructor for a SOCK_DGRAM ICMP socket.
+socket2 = "0.6"
+
+# poll(2) on every unix; the error queue (IP_RECVERR, MSG_ERRQUEUE) on Linux.
+[target.'cfg(unix)'.dependencies]
+# socket2 0.6 needs 0.2.172, so a lower bound here would never resolve.
+libc = "0.2.172"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu", "aarch64-apple-darwin"]
